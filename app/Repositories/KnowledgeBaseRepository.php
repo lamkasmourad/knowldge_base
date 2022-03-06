@@ -22,22 +22,37 @@ class KnowledgeBaseRepository implements KnowledgeBaseRepositoryInterface
         if(!is_null($contenu)){
             foreach($newKeywords as $newKeyword){
                 $keyword = $this->attachKeywordToContenu($contenu,$newKeyword->label,$newKeyword->weight,false,false);
+                $alreadySet = []; 
                 foreach($newKeyword->synonyms as $newSynonym ){
                     $synonym = $this->attachKeywordToContenu($contenu,$newSynonym->label,$newKeyword->weight,true,false);
-                    $synonymsGlobal = $this->associateVoisinToKeywords($keyword,$synonym);
-                    log_info($synonymsGlobal);
-                    foreach ($synonymsGlobal as $synonymGlobal){
-                        log_info('synonym global : ' . $synonymGlobal->id);
-                        $this->attachKeywordToContenu($contenu,$synonymGlobal->label,$newKeyword->weight,true,true);
+                    $alreadySet[] = $synonym->id; 
+                    $synonymsGlobalOfSynonym = $this->associateVoisinToKeywords($keyword,$synonym);
+                    foreach ($synonymsGlobalOfSynonym as $synonymGlobal){
+                        $alreadySet[] = $synonymGlobal->id; 
+                        $this->attachKeywordToContenu($contenu,$synonymGlobal->label,$newKeyword->weight,false,true,$synonymGlobal);
                     }
                 }
-                log_info($keyword->voisin()->first()->keywords()->get()->toArray());
+                if(!is_null( $keyword->voisin()->first())){
+                    $synonymsGlobalOfKeyword = $keyword->voisin()->first()->keywords()->get(); 
+                    if(!is_null($synonymsGlobalOfKeyword)){
+                        foreach ($synonymsGlobalOfKeyword as $synonymGlobal){
+                            if(!in_array($synonymGlobal->id,$alreadySet)){
+                                $this->attachKeywordToContenu($contenu,$synonymGlobal->label,$newKeyword->weight,false,true,$synonymGlobal);
+                            }
+                        }
+                    }
+                }
+               
             }
             return 'success';
         }else{
             return [];
         }
 
+    }
+
+    private function handleKeywordSynonym($keyword){
+        $keyword->voisin()->first()->keywords()->get()->toArray(); 
     }
 
     private function createKeywordIfNotExist($label){
@@ -62,11 +77,11 @@ class KnowledgeBaseRepository implements KnowledgeBaseRepositoryInterface
         return $voisin;
     }
 
-    private function attachKeywordToContenu($contenu,$label,$weight,$isSynonym,$isSynonymGlobal){
-        $keyword = $this->createKeywordIfNotExist($label);
+    private function attachKeywordToContenu($contenu,$label,$weight,$isSynonym,$isSynonymGlobal,$keyword = null){
+        if(is_null($keyword)){
+            $keyword = $this->createKeywordIfNotExist($label);
+        }
         $keywordsIds = $contenu->keywords()->pluck('keyword_id')->toArray();
-        log_info('keyword id : ' . $keyword->id);
-        log_info($keywordsIds);
         if(!in_array($keyword->id,$keywordsIds)){
             $contenu->keywords()->save($keyword,['weight' => $weight,'is_synonym' => $isSynonym, 'is_synonym_global' => $isSynonymGlobal]);
         }

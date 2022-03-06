@@ -42,16 +42,16 @@ class ContenuController extends Controller
       if(!empty($validated)){
         return response()->json($validated,400 );
       }else{
-        $text = 'test 3';
+        $text = 'test 2';
 
-        $check_question = 'test 3 check question';
+        $check_question = 'test 2 check question';
 
-        $scenario = 'test 3 scenario';
+        $scenario = 'test 2 scenario';
 
         $contenu = $this->knowledgeBaseRepo->createContenu($text,$check_question,$scenario);
 
 
-        $synonyms =[]; //[$this->getKeyword('test 1 synonym 1'), $this->getKeyword('test 1 synonym 2')];
+        $synonyms = []; //[$this->getKeyword('test 1 synonym 1'), $this->getKeyword('test 1 synonym 2')];
 
         $keyword = $this->getKeyword('test 1 keyword');
         $keyword->weight = '10';
