@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Contenu;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\KnowledgeBaseRepositoryInterface;
-
+use App\Repositories\Interfaces\ContenuRepositoryInterface;
 use Illuminate\Http\Request;
 use stdClass;
 
 class ContenuController extends Controller
 {
 
-    protected $knowledgeBaseRepo;
-    public function __construct(KnowledgeBaseRepositoryInterface $knowledgeBaseRepo)
+    protected $contenuRepository;
+    public function __construct(ContenuRepositoryInterface $contenuRepository)
     {
-        $this->knowledgeBaseRepo = $knowledgeBaseRepo;
+        $this->contenuRepository = $contenuRepository;
     }
+
     private function checkForMissingInput(Request $request){
         $missingInput = [];
         if(!$request->has('text')){
@@ -30,37 +30,46 @@ class ContenuController extends Controller
             array_push($missingInput,'scenario');
         }
 
+       /* if(!$request->has('category_id')){
+            array_push($missingInput,'category_id');
+        }*/
+
         if(count($missingInput)>0){
-            return 'One/More input is Missing : ' . implode(',', $missingInput);
+            return 'One/More input(is) is/are Missing : ' . implode(',', $missingInput);
         }else{
             return '';
         }
     }
     public function saveContenuAndKeywords(Request $request){
+      \DB::connection()->enableQueryLog();
       $validated = $this->checkForMissingInput($request);
 
       if(!empty($validated)){
         return response()->json($validated,400 );
       }else{
-        $text = 'test 2';
+        $text = 'test 10';
 
-        $check_question = 'test 2 check question';
+        $check_question = 'test 10 check question';
 
-        $scenario = 'test 2 scenario';
+        $scenario = 'test 10 scenario';
 
-        $contenu = $this->knowledgeBaseRepo->createContenu($text,$check_question,$scenario);
+        $categoriesId = [1,3];
 
+        $contenu = $this->contenuRepository->createContenu($text,$check_question,$scenario,$categoriesId);
 
-        $synonyms = []; //[$this->getKeyword('test 1 synonym 1'), $this->getKeyword('test 1 synonym 2')];
+        $synonyms =  [$this->getKeyword('test 10 synonym 1'), $this->getKeyword('test 10 synonym 2')];
 
-        $keyword = $this->getKeyword('test 1 keyword');
+        $keyword = $this->getKeyword('test 10 synonym 1');
+
         $keyword->weight = '10';
         $keyword->synonyms =  $synonyms;
 
-        $result = $this->knowledgeBaseRepo->saveContenuKeywords($contenu,[$keyword]);
+        $result = $this->contenuRepository->saveContenuKeywords($contenu,[$keyword]);
 
-        //$contenu = $this->knowledgeBaseRepo->createContenu($request->text,$request->check_question,$request->scenario);
 
+        //$contenu = $this->contenuRepository->createContenu($request->text,$request->check_question,$request->scenario);
+        $queries = \DB::getQueryLog();
+        log_info($queries);
         return response()->json($result);
       }
 

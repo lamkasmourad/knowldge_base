@@ -8,9 +8,8 @@ class Category extends Model
 {
     public $table = "categories";
 
-    public function contenus()
-    {
-        return $this->hasMany(Contenu::class);
+    public function contenus(){
+        return $this->belongsToMany('App\Models\Contenu','contenu_categories');
     }
 
 }

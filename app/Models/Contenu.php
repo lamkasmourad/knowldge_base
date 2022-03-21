@@ -17,11 +17,8 @@ class Contenu extends Model
         return $this->belongsToMany('App\Models\Keyword','contenu_keywords')->withPivot(['weight','is_synonym','is_synonym_global']);
     }
 
-    public function category()
-    {
-        return $this->belongsTo(PerimetreDetaille::class, 'perimetre_detaille_id');
+    public function categories(){
+        return $this->belongsToMany('App\Models\Category','contenu_categories');
     }
-
-
 
 }

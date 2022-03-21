@@ -11,6 +11,6 @@ class Voisin extends Model
     protected $table = 'voisins';
 
     public function keywords(){
-        return $this->hasMany('App\Models\Keyword');
+        return $this->belongsToMany('App\Models\Keyword','voisin_keywords')->withPivot(['is_keyword']);
     }
 }
