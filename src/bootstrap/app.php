@@ -94,7 +94,17 @@ $app->configure('app');
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(Fruitcake\Cors\CorsServiceProvider::class);
+
 $app->register(App\Repositories\RepositoryProvider::class);
+
+
+$app->configure('cors');
+
+
+$app->middleware([
+    Fruitcake\Cors\HandleCors::class,
+]);
 
 /*
 |--------------------------------------------------------------------------

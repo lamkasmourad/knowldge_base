@@ -6,8 +6,9 @@ use App\Models\Contenu;
 use App\Models\Keyword;
 use App\Models\Voisin;
 use App\Repositories\Interfaces\ContenuRepositoryInterface;
+use App\Repositories\BaseRepository;
 
-class ContenuRepository implements ContenuRepositoryInterface
+class ContenuRepository extends BaseRepository implements ContenuRepositoryInterface
 {
 
     public function createContenu($text, $checkQuestion, $scenario,$categoriesId, $isActive = true)

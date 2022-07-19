@@ -23,4 +23,5 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix'=>'api'], function() use($router){
     $router->post('contenu/keywords/save', 'Contenu\ContenuController@saveContenuAndKeywords');
+    $router->post('contenu/create','Contenu\ContenuController@createContenu');
 });

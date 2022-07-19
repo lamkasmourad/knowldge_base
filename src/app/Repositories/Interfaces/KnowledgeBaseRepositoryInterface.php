@@ -2,8 +2,9 @@
 
 namespace App\Repositories\Interfaces;
 
+use App\Repositories\BaseRepository;
 
-interface KnowledgeBaseRepositoryInterface
+interface KnowledgeBaseRepositoryInterface extends BaseRepository
 {
 
 }

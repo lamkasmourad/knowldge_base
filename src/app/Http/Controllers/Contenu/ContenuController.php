@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Contenu;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Repositories\Interfaces\ContenuRepositoryInterface;
 use Illuminate\Http\Request;
 use stdClass;
@@ -83,6 +84,22 @@ class ContenuController extends Controller
         $obj->label  = $label;
         return $obj;
     }
+
+
+    public function createContenu(Request $request){
+        $contenu = $this->contenuRepository->createContenu($request->text,$request->controleQuestion,$request->scenario,$request->categories);
+
+    }
+
+
+
+    public function getAllCategories(){
+
+        Category::all();
+    }
+
+
+
 
 
 }
