@@ -73,33 +73,21 @@ class ContenuController extends Controller
         log_info($queries);
         return response()->json($result);
       }
-
-
     }
 
     public function getKeyword($label){
-
         $obj = new stdClass;
 
         $obj->label  = $label;
         return $obj;
     }
 
-
     public function createContenu(Request $request){
-        $contenu = $this->contenuRepository->createContenu($request->text,$request->controleQuestion,$request->scenario,$request->categories);
-
+        $contenu = $this->contenuRepository->createContenu($request->text,$request->controleQuestion,$request->scenario,$request->selectedCategories);
+        if(!is_null($contenu)){
+            return response()->json("success");
+        }
     }
-
-
-
-    public function getAllCategories(){
-
-        Category::all();
-    }
-
-
-
 
 
 }

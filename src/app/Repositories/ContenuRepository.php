@@ -8,7 +8,7 @@ use App\Models\Voisin;
 use App\Repositories\Interfaces\ContenuRepositoryInterface;
 use App\Repositories\BaseRepository;
 
-class ContenuRepository extends BaseRepository implements ContenuRepositoryInterface
+class ContenuRepository implements ContenuRepositoryInterface
 {
 
     public function createContenu($text, $checkQuestion, $scenario,$categoriesId, $isActive = true)

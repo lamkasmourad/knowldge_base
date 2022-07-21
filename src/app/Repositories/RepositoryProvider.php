@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\ContenuRepositoryInterface;
 use App\Repositories\Interfaces\KnowledgeBaseRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +20,11 @@ class RepositoryProvider extends ServiceProvider
         $this->app->bind(
             KnowledgeBaseRepositoryInterface::class,
             KnowledgeBaseRepository::class
+        );
+
+        $this->app->bind(
+            CategoryRepositoryInterface::class,
+            CategoryRepository::class
         );
 
     }

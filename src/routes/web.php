@@ -24,4 +24,7 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix'=>'api'], function() use($router){
     $router->post('contenu/keywords/save', 'Contenu\ContenuController@saveContenuAndKeywords');
     $router->post('contenu/create','Contenu\ContenuController@createContenu');
+    $router->group(['prefix' => 'category'], function() use ($router){
+        $router->get('all','Category\CategoryController@getAllCategories');
+    });
 });
