@@ -2,7 +2,6 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-use App\Http\Controllers\Communication\ContenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +21,19 @@ $router->get('/', function () use ($router) {
 
 
 $router->group(['prefix'=>'api'], function() use($router){
+    $router->group(['prefix' => 'category'], function() use ($router){
+
+    });
+    $router->get('test', function () {
+        return "it's working";
+    });
+
     $router->post('contenu/keywords/save', 'Contenu\ContenuController@saveContenuAndKeywords');
-    $router->post('contenu/create','Contenu\ContenuController@createContenu');
+
+    $router->group(['prefix' => 'contenu'], function() use ($router){
+        $router->post('create','Contenu\ContenuController@createContenu');
+        $router->get('get/{contenu_id}','Contenu\ContenuController@getContenu');
+    });
     $router->group(['prefix' => 'category'], function() use ($router){
         $router->get('all','Category\CategoryController@getAllCategories');
     });

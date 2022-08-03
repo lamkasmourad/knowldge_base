@@ -13,6 +13,7 @@ class ContenuRepository implements ContenuRepositoryInterface
 
     public function createContenu($text, $checkQuestion, $scenario,$categoriesId, $isActive = true)
     {
+        $contenu = Contenu::where('text',$text)->first();
         $contenu = new Contenu(['text' => $text, 'check_question' => $checkQuestion, 'scenario' => $scenario, 'active' => $isActive]);
         $contenu->save();
         $contenu->categories()->attach($categoriesId);

@@ -21,4 +21,8 @@ class Contenu extends Model
         return $this->belongsToMany('App\Models\Category','contenu_categories');
     }
 
+    public function selectedCategories(){
+        return $this->categories()->pluck('category_id');
+    }
+
 }
