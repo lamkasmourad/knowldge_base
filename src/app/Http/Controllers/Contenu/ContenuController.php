@@ -44,8 +44,9 @@ class ContenuController extends Controller
     }
     public function saveContenuAndKeywords(Request $request)
     {
+        //return $request->all();
         \DB::connection()->enableQueryLog();
-        $validated = $this->checkForMissingInput($request);
+        //$validated = $this->checkForMissingInput($request);
 
         if (!empty($validated)) {
             return response()->json($validated, 400);
@@ -87,14 +88,16 @@ class ContenuController extends Controller
 
     public function createContenu(Request $request)
     {
+        //{text: "test1 ", controleQuestion: "test2", scenario: "tet3", selectedCategories: [1]}
+        //return $request->all();
         $contenu = Contenu::where('text', $request->text)->first();
         if (is_null($contenu)) {
             $contenu = $this->contenuRepository->createContenu($request->text, $request->controleQuestion, $request->scenario, $request->selectedCategories);
             if (!is_null($contenu)) {
-                return response()->json("success");
+                return response()->json(["message" => "success"]);
             }
         } else {
-            return response()->json("DUPLICATE_CONTENU");
+            return response()->json(["message" => "duplicated"]);
         }
     }
 
